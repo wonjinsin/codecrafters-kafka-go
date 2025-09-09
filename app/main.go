@@ -34,10 +34,12 @@ func response(conn net.Conn) {
 		buffer := make([]byte, 1024)
 		_, err := conn.Read(buffer)
 		if err != nil && err == io.EOF {
-			fmt.Println("read")
 			break
 		}
 
-		conn.Write([]byte{0, 0, 0, 0, 0, 0, 0, 7})
+		b := []byte{0, 0, 0, 0}
+		b = append(b, buffer[8:12]...)
+
+		conn.Write(b)
 	}
 }
