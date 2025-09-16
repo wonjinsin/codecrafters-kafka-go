@@ -88,8 +88,8 @@ type Response struct {
 
 func NewResponse(r *Request) *Response {
 	errorCode := int16(0)
-	if r.Header.RequestAPIVersion > 4 {
-		errorCode = 32
+	if r.Header.RequestAPIVersion < 0 || r.Header.RequestAPIVersion > 4 {
+		errorCode = 35
 	}
 	return &Response{
 		Message: 33,
@@ -99,11 +99,19 @@ func NewResponse(r *Request) *Response {
 		Body: &ResponseBody{
 			ErrorCode: errorCode,
 			VersionsArray: ResponseBodyVersionsArray{
-				Length: 3,
+				Length: 4,
 				Versions: ResponseBodyVersions{
-					&ResponseBodyVersion{},
-					&ResponseBodyVersion{},
-					&ResponseBodyVersion{},
+					&ResponseBodyVersion{
+						APIKey:     1,
+						MaxVersion: 17,
+					},
+					&ResponseBodyVersion{
+						APIKey:     18,
+						MaxVersion: 4,
+					},
+					&ResponseBodyVersion{
+						APIKey: 75,
+					},
 				},
 			},
 		},
